@@ -20,6 +20,7 @@ package org.apache.skywalking.apm.network.trace.component;
 
 /**
  * The <code>Component</code> represents component library, which has been supported by skywalking sniffer.
+ * 组件，表示组件包，空中漫步嗅探器已经支持的。
  * <p>
  * The supported list is in {@link ComponentsDefine}.
  */
