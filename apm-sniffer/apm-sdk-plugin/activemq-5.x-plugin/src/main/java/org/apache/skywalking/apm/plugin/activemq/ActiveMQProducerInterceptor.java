@@ -50,16 +50,19 @@ public class ActiveMQProducerInterceptor implements InstanceMethodsAroundInterce
         String url = (String) objInst.getSkyWalkingDynamicField();
         AbstractSpan activeSpan = null;
         if (activeMQDestination.getDestinationType() == QUEUE_TYPE || activeMQDestination.getDestinationType() == TEMP_QUEUE_TYPE) {
+            // 消息队列
             activeSpan = ContextManager.createExitSpan(OPERATE_NAME_PREFIX + "Queue/" + activeMQDestination.getPhysicalName() + PRODUCER_OPERATE_NAME_SUFFIX, contextCarrier, url);
             Tags.MQ_BROKER.set(activeSpan, url);
             Tags.MQ_QUEUE.set(activeSpan, activeMQDestination.getPhysicalName());
 
         } else if (activeMQDestination.getDestinationType() == TOPIC_TYPE || activeMQDestination.getDestinationType() == TEMP_TOPIC_TYPE) {
+            // 消息主题
             activeSpan = ContextManager.createExitSpan(OPERATE_NAME_PREFIX + "Topic/" + activeMQDestination.getPhysicalName() + PRODUCER_OPERATE_NAME_SUFFIX, contextCarrier, url);
             Tags.MQ_BROKER.set(activeSpan, url);
             Tags.MQ_TOPIC.set(activeSpan, activeMQDestination.getPhysicalName());
         }
         contextCarrier.extensionInjector().injectSendingTimestamp();
+        // 消息队列
         SpanLayer.asMQ(activeSpan);
         activeSpan.setComponent(ComponentsDefine.ACTIVEMQ_PRODUCER);
         CarrierItem next = contextCarrier.items();

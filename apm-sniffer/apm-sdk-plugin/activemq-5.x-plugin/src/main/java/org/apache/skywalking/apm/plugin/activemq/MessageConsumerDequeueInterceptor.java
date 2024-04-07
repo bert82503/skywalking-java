@@ -64,6 +64,7 @@ public class MessageConsumerDequeueInterceptor implements InstanceMethodsAroundI
         AbstractSpan activeSpan = null;
         if (messageDispatch.getDestination().getDestinationType() == QUEUE_TYPE || messageDispatch.getDestination()
                                                                                                   .getDestinationType() == TEMP_QUEUE_TYPE) {
+            // 消息队列
             activeSpan = ContextManager.createEntrySpan(
                                            OPERATE_NAME_PREFIX + "Queue/" + messageDispatch.getDestination()
                                                                                            .getPhysicalName() + CONSUMER_OPERATE_NAME_SUFFIX, null)
@@ -73,6 +74,7 @@ public class MessageConsumerDequeueInterceptor implements InstanceMethodsAroundI
         } else if (messageDispatch.getDestination()
                                   .getDestinationType() == TOPIC_TYPE || messageDispatch.getDestination()
                                                                                         .getDestinationType() == TEMP_TOPIC_TYPE) {
+            // 消息主题
             activeSpan = ContextManager.createEntrySpan(
                                            OPERATE_NAME_PREFIX + "Topic/" + messageDispatch.getDestination()
                                                                                            .getPhysicalName() + CONSUMER_OPERATE_NAME_SUFFIX, null)
@@ -85,6 +87,7 @@ public class MessageConsumerDequeueInterceptor implements InstanceMethodsAroundI
         }
         activeSpan.setPeer(url);
         activeSpan.setComponent(ComponentsDefine.ACTIVEMQ_CONSUMER);
+        // 消息队列
         SpanLayer.asMQ(activeSpan);
         CarrierItem next = contextCarrier.items();
         while (next.hasNext()) {

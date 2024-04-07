@@ -73,6 +73,7 @@ public class AerospikeClientMethodInterceptor implements InstanceMethodsAroundIn
         String methodName = method.getName();
         AbstractSpan span = ContextManager.createExitSpan("Aerospike/" + methodName, peer);
         span.setComponent(ComponentsDefine.AEROSPIKE);
+        // 缓存
         Tags.CACHE_TYPE.set(span, "Aerospike");
         SpanLayer.asCache(span);
         parseOperation(methodName).ifPresent(op -> Tags.CACHE_OP.set(span, op));
