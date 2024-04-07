@@ -51,6 +51,9 @@ import static org.apache.skywalking.apm.agent.core.conf.Constants.SERVICE_NAME_P
 public class SnifferConfigInitializer {
     private static ILog LOGGER = LogManager.getLogger(SnifferConfigInitializer.class);
     private static final String SPECIFIED_CONFIG_PATH = "skywalking_config";
+    /**
+     * 默认的配置文件名称
+     */
     private static final String DEFAULT_CONFIG_FILE_NAME = "/config/agent.config";
     private static final String ENV_KEY_PREFIX = "skywalking.";
     private static Properties AGENT_SETTINGS;
@@ -214,9 +217,12 @@ public class SnifferConfigInitializer {
      */
     private static void setAgentVersion() {
         try {
+            // 从 JAR 清单文件名列表查找代理版本
             Enumeration<URL> resources = SnifferConfigInitializer.class.getClassLoader().getResources(JarFile.MANIFEST_NAME);
             while (resources.hasMoreElements()) {
                 URL url = resources.nextElement();
+                // JAR 清单文件名路径
+                // SnifferConfigInitializer url:jar:file:/Users/lihuagang/.m2/repository/org/apache/skywalking/apm-toolkit-trace/9.1.0/apm-toolkit-trace-9.1.0.jar!/META-INF/MANIFEST.MF
                 LOGGER.info("SnifferConfigInitializer url:{}", url.toString());
                 try (InputStream is = url.openStream()) {
                     if (is != null) {
@@ -225,6 +231,7 @@ public class SnifferConfigInitializer {
                         String projectName = mainAttribs.getValue("Implementation-Vendor-Id");
                         if (projectName != null) {
                             if ("org.apache.skywalking".equals(projectName)) {
+                                // 代理实现版本
                                 Config.Agent.VERSION = mainAttribs.getValue("Implementation-Version");
                                 break;
                             }
@@ -249,6 +256,7 @@ public class SnifferConfigInitializer {
 
         if (configFile.exists() && configFile.isFile()) {
             try {
+                // 配置文件路径
                 LOGGER.info("Config file found in {}.", configFile);
 
                 return new InputStreamReader(new FileInputStream(configFile), StandardCharsets.UTF_8);

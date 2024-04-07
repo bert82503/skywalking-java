@@ -63,6 +63,7 @@ import static org.apache.skywalking.apm.agent.core.conf.Constants.NAME_TRAIT;
 
 /**
  * The main entrance of sky-walking agent, based on javaagent mechanism.
+ * sky-walking代理的主入口，基于Java代理机制。
  */
 public class SkyWalkingAgent {
     private static ILog LOGGER = LogManager.getLogger(SkyWalkingAgent.class);
@@ -73,6 +74,7 @@ public class SkyWalkingAgent {
     public static void premain(String agentArgs, Instrumentation instrumentation) throws PluginException {
         final PluginFinder pluginFinder;
         try {
+            // 初始化核心配置
             SnifferConfigInitializer.initializeCoreConfig(agentArgs);
         } catch (Exception e) {
             // try to resolve a new logger, and use the new logger to write the error log here
@@ -90,6 +92,7 @@ public class SkyWalkingAgent {
         }
 
         try {
+            // 通过插件查找器加载所有插件
             pluginFinder = new PluginFinder(new PluginBootstrap().loadPlugins());
         } catch (AgentPackageNotFoundException ape) {
             LOGGER.error(ape, "Locate agent.jar failure. Shutting down.");
@@ -99,6 +102,7 @@ public class SkyWalkingAgent {
             return;
         }
 
+        // 开始安装类字节码转换器
         LOGGER.info("Skywalking agent begin to install transformer ...");
 
         AgentBuilder agentBuilder = newAgentBuilder().ignore(
@@ -136,14 +140,17 @@ public class SkyWalkingAgent {
 
         PluginFinder.pluginInitCompleted();
 
+        // 类字节码转换器已安装完成
         LOGGER.info("Skywalking agent transformer has installed.");
 
         try {
+            // 服务管理器启动
             ServiceManager.INSTANCE.boot();
         } catch (Exception e) {
             LOGGER.error(e, "Skywalking agent boot failure.");
         }
 
+        // JVM运行时实例的关闭回调钩子线程
         Runtime.getRuntime()
                .addShutdownHook(new Thread(ServiceManager.INSTANCE::shutdown, "skywalking service shutdown thread"));
     }

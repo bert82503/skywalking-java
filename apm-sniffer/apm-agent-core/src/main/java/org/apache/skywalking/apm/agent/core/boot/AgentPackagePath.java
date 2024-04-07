@@ -53,6 +53,7 @@ public class AgentPackagePath {
         if (resource != null) {
             String urlString = resource.toString();
 
+            // skywalking-agent.jar 包路径
             LOGGER.debug("The beacon class location is {}.", urlString);
 
             int insidePathIndex = urlString.indexOf('!');

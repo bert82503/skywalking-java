@@ -35,10 +35,12 @@ public class PluginBootstrap {
 
     /**
      * load all plugins.
+     * 加载所有插件
      *
      * @return plugin definition list.
      */
     public List<AbstractClassEnhancePluginDefine> loadPlugins() throws AgentPackageNotFoundException {
+        // 代理类加载器初始化
         AgentClassLoader.initDefaultLoader();
 
         PluginResourcesResolver resolver = new PluginResourcesResolver();

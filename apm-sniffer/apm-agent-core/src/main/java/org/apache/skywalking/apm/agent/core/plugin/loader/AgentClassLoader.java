@@ -174,6 +174,7 @@ public class AgentClassLoader extends ClassLoader {
             jarScanLock.lock();
             try {
                 if (allJars == null) {
+                    // 获取所有的插件.jar列表
                     allJars = doGetJars();
                 }
             } finally {
@@ -194,6 +195,7 @@ public class AgentClassLoader extends ClassLoader {
                         File file = new File(path, fileName);
                         Jar jar = new Jar(new JarFile(file), file);
                         jars.add(jar);
+                        // 插件.jar已加载
                         LOGGER.info("{} loaded.", file.toString());
                     } catch (IOException e) {
                         LOGGER.error(e, "{} jar file can't be resolved", fileName);
