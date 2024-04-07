@@ -35,8 +35,14 @@ import static org.apache.skywalking.apm.agent.core.plugin.bytebuddy.ArgumentType
  */
 public class ActiveMQConsumerInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
     public static final String INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.activemq.MessageConsumerDequeueInterceptor";
+    /**
+     * ActiveMQ消息消费者
+     */
     public static final String ENHANCE_CLASS_CONSUMER = "org.apache.activemq.ActiveMQMessageConsumer";
     public static final String CONSTRUCTOR_INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.activemq.ActiveMQConsumerConstructorInterceptor";
+    /**
+     * 从消息队列出列
+     */
     public static final String ENHANCE_METHOD_DISPATCH = "dequeue";
     public static final String CONSTRUCTOR_INTERCEPT_TYPE = "org.apache.activemq.ActiveMQSession";
 
