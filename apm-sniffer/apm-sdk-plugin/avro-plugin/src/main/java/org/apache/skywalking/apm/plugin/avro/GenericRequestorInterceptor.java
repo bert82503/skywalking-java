@@ -34,6 +34,7 @@ public class GenericRequestorInterceptor extends AbstractRequestInterceptor {
         AvroInstance instance = (AvroInstance) objInst.getSkyWalkingDynamicField();
 
         AbstractSpan span = ContextManager.createExitSpan(instance.namespace + allArguments[0], instance.remotePeer);
+        // rpc
         SpanLayer.asRPCFramework(span);
         span.setPeer(instance.remotePeer);
         span.setComponent(ComponentsDefine.AVRO_CLIENT);

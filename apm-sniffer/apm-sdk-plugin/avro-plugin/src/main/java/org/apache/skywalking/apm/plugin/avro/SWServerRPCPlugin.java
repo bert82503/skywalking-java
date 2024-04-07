@@ -44,18 +44,21 @@ public class SWServerRPCPlugin extends RPCPlugin {
 
     @Override
     public void serverReceiveRequest(RPCContext context) {
+        // 请求调用元数据
         Map meta = context.requestCallMeta();
 
         ContextCarrier carrier = new ContextCarrier();
         CarrierItem items = carrier.items();
         while (items.hasNext()) {
             items = items.next();
+            // 请求调用元数据通过链路头信息透传
             ByteBuffer buffer = (ByteBuffer) meta.get(new Utf8(items.getHeadKey()));
             items.setHeadValue(new String(buffer.array(), StandardCharsets.UTF_8));
         }
 
         String operationName = prefix + context.getMessage().getName();
         AbstractSpan span = ContextManager.createEntrySpan(operationName, carrier);
+        // rpc
         SpanLayer.asRPCFramework(span);
         span.setComponent(ComponentsDefine.AVRO_SERVER);
     }

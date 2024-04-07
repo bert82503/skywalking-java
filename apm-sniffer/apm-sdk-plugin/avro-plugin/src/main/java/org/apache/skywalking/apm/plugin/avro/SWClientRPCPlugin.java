@@ -40,6 +40,7 @@ public class SWClientRPCPlugin extends RPCPlugin {
         CarrierItem items = carrier.items();
         while (items.hasNext()) {
             items = items.next();
+            // 链路头信息通过请求调用元数据透传
             context.requestCallMeta().put(items.getHeadKey(), ByteBuffer.wrap(items.getHeadValue().getBytes(StandardCharsets.UTF_8)));
         }
     }
