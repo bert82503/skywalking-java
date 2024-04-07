@@ -54,6 +54,7 @@ public class ExecuteInterceptor implements InstanceMethodsAroundInterceptor {
         ContextCarrier contextCarrier = new ContextCarrier();
         ContextManager.inject(contextCarrier);
         span.setComponent(ComponentsDefine.ASYNC_HTTP_CLIENT);
+        // http
         Tags.HTTP.METHOD.set(span, httpRequest.getMethod());
         Tags.URL.set(span, httpRequest.getUrl());
         SpanLayer.asHttp(span);
@@ -65,6 +66,7 @@ public class ExecuteInterceptor implements InstanceMethodsAroundInterceptor {
         CarrierItem next = contextCarrier.items();
         while (next.hasNext()) {
             next = next.next();
+            // 链路头信息通过http头信息透传
             headers.set(next.getHeadKey(), next.getHeadValue());
         }
     }

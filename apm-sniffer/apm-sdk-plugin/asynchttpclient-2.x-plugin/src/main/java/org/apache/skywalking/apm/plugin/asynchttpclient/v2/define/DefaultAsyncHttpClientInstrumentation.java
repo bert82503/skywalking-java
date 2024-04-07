@@ -30,7 +30,13 @@ import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName
 
 public class DefaultAsyncHttpClientInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
 
+    /**
+     * 增强类
+     */
     private static final String ENHANCE_CLASS = "org.asynchttpclient.DefaultAsyncHttpClient";
+    /**
+     * 增强方法
+     */
     private static final String ENHANCE_METHOD = "execute";
 
     private static final String INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.asynchttpclient.v2.ExecuteInterceptor";
