@@ -31,8 +31,14 @@ import org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch;
 
 public class CanalInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
     public static final String INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.canal.CanalInterceptor";
+    /**
+     * 增强类
+     */
     public static final String ENHANCE_CLASS = "com.alibaba.otter.canal.client.impl.SimpleCanalConnector";
     public static final String CONSTRUCTOR_INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.canal.CanalConstructorInterceptor";
+    /**
+     * 增强方法
+     */
     public static final String ENHANCE_METHOD_DISPATCH = "getWithoutAck";
 
     @Override

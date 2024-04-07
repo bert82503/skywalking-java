@@ -29,6 +29,9 @@ import org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch;
 import static net.bytebuddy.matcher.ElementMatchers.any;
 
 public class ClusterNodeInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
+    /**
+     * 增强类
+     */
     public static final String ENHANCE_CLASS = "com.alibaba.otter.canal.client.impl.ClusterNodeAccessStrategy";
     public static final String CONSTRUCTOR_INTERCEPTOR_CLASS = "org.apache.skywalking.apm.plugin.canal.ClusterNodeConstructInterceptor";
 

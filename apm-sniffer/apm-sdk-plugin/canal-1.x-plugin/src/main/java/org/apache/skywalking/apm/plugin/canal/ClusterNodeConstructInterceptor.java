@@ -34,6 +34,7 @@ public class ClusterNodeConstructInterceptor implements InstanceConstructorInter
     @Override
     public void onConstruct(EnhancedInstance objInst, Object[] allArguments) {
 
+        // 集群路径
         String clusterPath = ZookeeperPathUtils.getDestinationClusterRoot(allArguments[0].toString());
         ZkClientx zkClientx = ((ClusterNodeAccessStrategy) objInst).getZkClient();
         ContextManager.getRuntimeContext().put("currentAddress", getCurrentAddress(zkClientx.getChildren(clusterPath)));

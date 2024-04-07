@@ -68,6 +68,7 @@ public class CanalInterceptor implements InstanceMethodsAroundInterceptor {
         AbstractSpan activeSpan = ContextManager.createExitSpan("Canal/" + destination, url)
                                                 .start(System.currentTimeMillis());
         activeSpan.setComponent(ComponentsDefine.CANAL);
+        // 标签
         activeSpan.tag(BATCH_SIZE_TAG, batchSize);
         activeSpan.tag(DESTINATION_TAG, destination);
 

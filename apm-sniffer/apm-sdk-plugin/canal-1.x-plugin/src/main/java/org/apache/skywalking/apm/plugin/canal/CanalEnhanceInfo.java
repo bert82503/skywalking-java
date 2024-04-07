@@ -40,11 +40,13 @@ public class CanalEnhanceInfo {
 
     /**
      * canal-server address
+     * 服务器地址
      */
     private String url;
 
     /**
      * canal destination
+     * 目的地
      */
     private String destination;
 }
