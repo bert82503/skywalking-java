@@ -89,9 +89,11 @@ public class MessageConsumerDequeueInterceptor implements InstanceMethodsAroundI
         activeSpan.setComponent(ComponentsDefine.ACTIVEMQ_CONSUMER);
         // 消息队列
         SpanLayer.asMQ(activeSpan);
+
         CarrierItem next = contextCarrier.items();
         while (next.hasNext()) {
             next = next.next();
+            // 消息头属性通过链路头信息透传
             Object propertyValue = messageDispatch.getMessage().getProperty(next.getHeadKey());
             if (propertyValue != null) {
                 next.setHeadValue(propertyValue.toString());

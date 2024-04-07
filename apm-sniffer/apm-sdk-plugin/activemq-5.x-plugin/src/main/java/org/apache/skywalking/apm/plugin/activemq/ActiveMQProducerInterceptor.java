@@ -65,10 +65,11 @@ public class ActiveMQProducerInterceptor implements InstanceMethodsAroundInterce
         // 消息队列
         SpanLayer.asMQ(activeSpan);
         activeSpan.setComponent(ComponentsDefine.ACTIVEMQ_PRODUCER);
-        CarrierItem next = contextCarrier.items();
 
+        CarrierItem next = contextCarrier.items();
         while (next.hasNext()) {
             next = next.next();
+            // 链路头信息通过消息属性透传
             message.setStringProperty(next.getHeadKey(), next.getHeadValue());
         }
 
