@@ -59,6 +59,7 @@ public abstract class AbstractArmeriaClientInterceptor implements InstanceMethod
         final AbstractSpan exitSpan = ContextManager.createExitSpan(path, contextCarrier, remotePeer);
 
         exitSpan.setComponent(ComponentsDefine.ARMERIA);
+        // http
         exitSpan.setLayer(SpanLayer.HTTP);
         Tags.HTTP.METHOD.set(exitSpan, httpMethod.name());
 

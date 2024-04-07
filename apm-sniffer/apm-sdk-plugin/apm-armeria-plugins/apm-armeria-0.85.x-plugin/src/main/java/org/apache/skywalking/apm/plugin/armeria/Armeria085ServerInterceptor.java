@@ -50,6 +50,7 @@ public class Armeria085ServerInterceptor implements InstanceMethodsAroundInterce
 
         AbstractSpan entrySpan = ContextManager.createEntrySpan(httpRequest.path(), carrier);
         entrySpan.setComponent(ComponentsDefine.ARMERIA);
+        // http
         entrySpan.setLayer(SpanLayer.HTTP);
         entrySpan.setPeer(httpRequest.authority());
         Tags.URL.set(entrySpan, httpRequest.path());
