@@ -32,6 +32,7 @@ public class SpanIDInterceptor implements StaticMethodsAroundInterceptor {
     @Override
     public void beforeMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes,
                              MethodInterceptResult result) {
+        // 追踪时的当前跨度身份
         result.defineReturnValue(ContextManager.getSpanId());
     }
 

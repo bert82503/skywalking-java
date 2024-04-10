@@ -32,6 +32,7 @@ public class TraceIDInterceptor implements StaticMethodsAroundInterceptor {
     @Override
     public void beforeMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes,
         MethodInterceptResult result) {
+        // 追踪时的第一个全局追踪身份
         result.defineReturnValue(ContextManager.getGlobalTraceId());
     }
 

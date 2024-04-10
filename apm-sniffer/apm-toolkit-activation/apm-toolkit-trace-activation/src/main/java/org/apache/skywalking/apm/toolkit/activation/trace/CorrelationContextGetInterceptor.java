@@ -29,6 +29,7 @@ public class CorrelationContextGetInterceptor implements StaticMethodsAroundInte
     @Override
     public void beforeMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes, MethodInterceptResult result) {
         final String key = (String) allArguments[0];
+        // 从关联上下文读取用户自定义数据
         final Optional<String> data = ContextManager.getCorrelationContext().get(key);
 
         result.defineReturnValue(data);

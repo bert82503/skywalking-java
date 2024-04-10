@@ -35,15 +35,30 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
  */
 public class TraceContextActivation extends ClassStaticMethodsEnhancePluginDefine {
 
+    /**
+     * 三层身份标识拦截类
+     */
     public static final String TRACE_ID_INTERCEPT_CLASS = "org.apache.skywalking.apm.toolkit.activation.trace.TraceIDInterceptor";
     public static final String SEGMENT_ID_INTERCEPT_CLASS = "org.apache.skywalking.apm.toolkit.activation.trace.SegmentIDInterceptor";
     public static final String SPAN_ID_INTERCEPT_CLASS = "org.apache.skywalking.apm.toolkit.activation.trace.SpanIDInterceptor";
+    /**
+     * 增强类-追踪上下文
+     */
     public static final String ENHANCE_CLASS = "org.apache.skywalking.apm.toolkit.trace.TraceContext";
+    /**
+     * 增强方法
+     */
     public static final String ENHANCE_TRACE_ID_METHOD = "traceId";
     public static final String ENHANCE_SEGMENT_ID_METHOD = "segmentId";
     public static final String ENHANCE_SPAN_ID_METHOD = "spanId";
+    /**
+     * 获取用户自定义的关联数据项
+     */
     public static final String ENHANCE_GET_CORRELATION_METHOD = "getCorrelation";
     public static final String INTERCEPT_GET_CORRELATION_CLASS = "org.apache.skywalking.apm.toolkit.activation.trace.CorrelationContextGetInterceptor";
+    /**
+     * 设置用户自定义的关联数据项
+     */
     public static final String ENHANCE_PUT_CORRELATION_METHOD = "putCorrelation";
     public static final String INTERCEPT_PUT_CORRELATION_CLASS = "org.apache.skywalking.apm.toolkit.activation.trace.CorrelationContextPutInterceptor";
 

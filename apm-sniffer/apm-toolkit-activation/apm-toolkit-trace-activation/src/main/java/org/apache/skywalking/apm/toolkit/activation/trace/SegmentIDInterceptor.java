@@ -32,6 +32,7 @@ public class SegmentIDInterceptor implements StaticMethodsAroundInterceptor {
     @Override
     public void beforeMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes,
                              MethodInterceptResult result) {
+        // 追踪时的当前片段身份
         result.defineReturnValue(ContextManager.getSegmentId());
     }
 

@@ -30,6 +30,7 @@ public class CorrelationContextPutInterceptor implements StaticMethodsAroundInte
     public void beforeMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes, MethodInterceptResult result) {
         final String key = (String) allArguments[0];
         final String value = (String) allArguments[1];
+        // 将用户自定义数据设置到关联上下文中
         final Optional<String> previous = ContextManager.getCorrelationContext().put(key, value);
 
         result.defineReturnValue(previous);
