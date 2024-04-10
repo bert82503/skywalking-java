@@ -183,6 +183,9 @@ public class Config {
         public static int IPV4_LIST_SIZE = 10;
     }
 
+    /**
+     * 指标收集器
+     */
     public static class Collector {
         /**
          * grpc channel status check interval
@@ -252,6 +255,9 @@ public class Config {
         public static int SNAPSHOT_TRANSPORT_BUFFER_SIZE = 500;
     }
 
+    /**
+     * 仪表
+     */
     public static class Meter {
         /**
          * If true, skywalking agent will enable sending meters. Otherwise disable meter report.
@@ -287,6 +293,9 @@ public class Config {
         public static int MAX_MESSAGE_SIZE = 10 * 1024 * 1024;
     }
 
+    /**
+     * 缓冲区
+     */
     public static class Buffer {
         public static int CHANNEL_SIZE = 5;
 
@@ -361,6 +370,9 @@ public class Config {
         public static Integer MAX_RECURSIVE_DEPTH = 1;
     }
 
+    /**
+     * 插件
+     */
     public static class Plugin {
         /**
          * Control the length of the peer field.
@@ -374,10 +386,14 @@ public class Config {
 
         /**
          * Mount the folders of the plugins. The folder path is relative to agent.jar.
+         * 挂载插件的文件夹，文件夹路径是相对于 agent.jar 的。
          */
         public static List<String> MOUNT = Arrays.asList("plugins", "activations");
     }
 
+    /**
+     * 关联上下文
+     */
     public static class Correlation {
         /**
          * Max element count in the correlation context.

@@ -33,11 +33,18 @@ import org.apache.skywalking.apm.util.StringUtil;
 
 /**
  * Correlation context, use to propagation user custom data.
+ * 关联上下文，用于传播用户自定义数据。
  */
 public class CorrelationContext {
 
+    /**
+     * 用户自定义数据
+     */
     private final Map<String, String> data;
 
+    /**
+     * 希望将自定义的参数自动记录到tag中
+     */
     private static final List<String> AUTO_TAG_KEYS;
 
     static {
@@ -144,8 +151,10 @@ public class CorrelationContext {
     /**
      * Prepare for the cross-process propagation. Inject the {@link #data} into {@link
      * ContextCarrier#getCorrelationContext()}
+     * 跨进程传播
      */
     void inject(ContextCarrier carrier) {
+        // 注入操作，向Carrier增加跨进程通信数据。
         carrier.getCorrelationContext().data.putAll(this.data);
     }
 
@@ -153,6 +162,7 @@ public class CorrelationContext {
      * Extra the {@link ContextCarrier#getCorrelationContext()} into this context.
      */
     void extract(ContextCarrier carrier) {
+        // 提取操作，从Carrier中获取跨进程通信数据。
         final Map<String, String> carrierCorrelationContext = carrier.getCorrelationContext().data;
         for (Map.Entry<String, String> entry : carrierCorrelationContext.entrySet()) {
             // Only data with limited count of elements can be added
@@ -166,8 +176,10 @@ public class CorrelationContext {
 
     /**
      * Process the active span
+     * 处理活动跨度
      *
      * 1. Inject the tags with auto-tag flag into the span
+     * 将带有自动标记标签的标记注入到跨度中
      */
     void handle(AbstractSpan span) {
         AUTO_TAG_KEYS.forEach(key -> this.get(key).ifPresent(val -> span.tag(new StringTag(key), val)));
@@ -175,6 +187,7 @@ public class CorrelationContext {
 
     /**
      * Clone the context data, work for capture to cross-thread.
+     * 克隆上下文数据，进行跨线程捕获。
      */
     @Override
     public CorrelationContext clone() {
@@ -185,6 +198,7 @@ public class CorrelationContext {
 
     /**
      * Continue the correlation context in another thread.
+     * 在另一个线程中继续关联上下文。
      *
      * @param snapshot holds the context.
      */
