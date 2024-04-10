@@ -29,16 +29,41 @@ import org.apache.skywalking.apm.network.language.agent.v3.SegmentReference;
  * {@link TraceSegmentRef} is like a pointer, which ref to another {@link TraceSegment}, use {@link #spanId} point to
  * the exact span of the ref {@link TraceSegment}.
  * <p>
+ * 追踪片段引用
  */
 @Getter
 public class TraceSegmentRef {
+    /**
+     * 片段引用类型
+     */
     private SegmentRefType type;
+    /**
+     * 追踪身份
+     */
     private String traceId;
+    /**
+     * 父追踪片段身份
+     */
     private String traceSegmentId;
+    /**
+     * 父追踪片段中的跨度身份
+     */
     private int spanId;
+    /**
+     * 父服务名称
+     */
     private String parentService;
+    /**
+     * 父服务实例标识
+     */
     private String parentServiceInstance;
+    /**
+     * 父服务的端点
+     */
     private String parentEndpoint;
+    /**
+     * 客户端的网络地址
+     */
     private String addressUsedAtClient;
 
     /**
@@ -47,6 +72,7 @@ public class TraceSegmentRef {
      * @param carrier the valid cross-process propagation format.
      */
     public TraceSegmentRef(ContextCarrier carrier) {
+        // 跨进程
         this.type = SegmentRefType.CROSS_PROCESS;
         this.traceId = carrier.getTraceId();
         this.traceSegmentId = carrier.getTraceSegmentId();
@@ -58,6 +84,7 @@ public class TraceSegmentRef {
     }
 
     public TraceSegmentRef(ContextSnapshot snapshot) {
+        // 跨线程
         this.type = SegmentRefType.CROSS_THREAD;
         this.traceId = snapshot.getTraceId().getId();
         this.traceSegmentId = snapshot.getTraceSegmentId();
@@ -109,6 +136,13 @@ public class TraceSegmentRef {
     }
 
     public enum SegmentRefType {
-        CROSS_PROCESS, CROSS_THREAD
+        /**
+         * 跨进程
+         */
+        CROSS_PROCESS,
+        /**
+         * 跨线程
+         */
+        CROSS_THREAD
     }
 }
