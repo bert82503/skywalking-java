@@ -24,9 +24,13 @@ import java.util.Optional;
  * Try to access the sky-walking tracer context. The context is not existed, always. only the middleware, component, or
  * rpc-framework are supported in the current invoke stack, in the same thread, the context will be available.
  * <p>
+ * 尝试访问追踪上下文。
+ * 上下文始终不存在。
+ * 当前调用堆栈仅支持中间件、组件或RPC框架，在同一线程中，上下文将可用。
  */
 public class TraceContext {
 
+    // 三层身份标识
     /**
      * Try to get the traceId of current trace context.
      *
@@ -55,6 +59,7 @@ public class TraceContext {
         return -1;
     }
 
+    // 关联上下文
     /**
      * Try to get the custom value from trace context.
      *
