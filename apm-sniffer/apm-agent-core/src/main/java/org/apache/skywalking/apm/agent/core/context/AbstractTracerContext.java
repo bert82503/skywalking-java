@@ -22,10 +22,15 @@ import org.apache.skywalking.apm.agent.core.context.trace.AbstractSpan;
 
 /**
  * The <code>AbstractTracerContext</code> represents the tracer context manager.
+ * 追踪上下文管理者，跨越进程边界，传递到下级span的状态。
  */
 public interface AbstractTracerContext {
+    // 跨进程传播
+    // Carrier：传递跨进程数据的搬运工，负责将追踪状态从一个进程"carries"（携带，传递）到另一个进程
     /**
      * Prepare for the cross-process propagation. How to initialize the carrier, depends on the implementation.
+     * 跨进程传播
+     * 注入操作，向Carrier增加跨进程通信数据。
      *
      * @param carrier to carry the context for crossing process.
      */
@@ -34,14 +39,17 @@ public interface AbstractTracerContext {
     /**
      * Build the reference between this segment and a cross-process segment. How to build, depends on the
      * implementation.
+     * 提取操作，从Carrier中获取跨进程通信数据。
      *
      * @param carrier carried the context from a cross-process segment.
      */
     void extract(ContextCarrier carrier);
 
+    // 跨线程传播
     /**
      * Capture a snapshot for cross-thread propagation. It's a similar concept with ActiveSpan.Continuation in
      * OpenTracing-java How to build, depends on the implementation.
+     * 捕获用于跨线程传播的快照。
      *
      * @return the {@link ContextSnapshot} , which includes the reference context.
      */
@@ -50,13 +58,16 @@ public interface AbstractTracerContext {
     /**
      * Build the reference between this segment and a cross-thread segment. How to build, depends on the
      * implementation.
+     * 在这个追踪片段和跨线程段之间构建引用。
      *
      * @param snapshot from {@link #capture()} in the parent thread.
      */
     void continued(ContextSnapshot snapshot);
 
+    // 三层身份标识
     /**
      * Get the global trace id, if needEnhance. How to build, depends on the implementation.
+     * 全局的追踪身份标识
      *
      * @return the string represents the id.
      */
@@ -64,6 +75,7 @@ public interface AbstractTracerContext {
 
     /**
      * Get the current segment id, if needEnhance. How to build, depends on the implementation.
+     * 当前追踪片段身份标识
      *
      * @return the string represents the id.
      */
@@ -71,11 +83,13 @@ public interface AbstractTracerContext {
 
     /**
      * Get the active span id, if needEnhance. How to build, depends on the implementation.
+     * 活跃的跨度身份标识
      *
      * @return the string represents the id.
      */
     int getSpanId();
 
+    // 跨度
     /**
      * Create an entry span
      *
@@ -117,6 +131,7 @@ public interface AbstractTracerContext {
 
     /**
      * Notify this context, current span is going to be finished async in another thread.
+     * 通知这个上下文，当前跨度将在另一个线程中异步完成。
      *
      * @return The current context
      */
@@ -131,11 +146,13 @@ public interface AbstractTracerContext {
 
     /**
      * Get current correlation context
+     * 获取当前关联上下文
      */
     CorrelationContext getCorrelationContext();
 
     /**
      * Get current primary endpoint name
+     * 获取当前主终端名称
      */
     String getPrimaryEndpointName();
 }
