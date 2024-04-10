@@ -30,53 +30,73 @@ import org.apache.skywalking.apm.util.StringUtil;
  * {@link ContextCarrier} is a data carrier of {@link TracingContext}. It holds the snapshot (current state) of {@link
  * TracingContext}.
  * <p>
+ * 传递跨进程数据的搬运工，负责将追踪状态从一个进程"carries"（携带，传递）到另一个进程。
  */
 @Setter(AccessLevel.PACKAGE)
 public class ContextCarrier implements Serializable {
+    /**
+     * 追踪身份
+     */
     @Getter
     private String traceId;
     /**
      * The segment id of the parent.
+     * 父追踪片段身份
      */
     @Getter
     private String traceSegmentId;
     /**
      * The span id in the parent segment.
+     * 父追踪片段中的跨度身份
      */
     @Getter
     private int spanId = -1;
+    /**
+     * 父服务名称
+     */
     @Getter
     private String parentService = Constants.EMPTY_STRING;
+    /**
+     * 父服务实例标识
+     */
     @Getter
     private String parentServiceInstance = Constants.EMPTY_STRING;
     /**
      * The endpoint(entrance URI/method signature) of the parent service.
+     * 父服务的端点
      */
     @Getter
     private String parentEndpoint;
     /**
      * The network address(ip:port, hostname:port) used in the parent service to access the current service.
+     * 客户端的网络地址
      */
     @Getter
     private String addressUsedAtClient;
     /**
      * The extension context contains the optional context to enhance the analysis in some certain scenarios.
+     * 扩展上下文，提供了部署在上游和下游服务中的探针之间的交互功能。
      */
     @Getter(AccessLevel.PACKAGE)
     private ExtensionContext extensionContext = new ExtensionContext();
     /**
      * User's custom context container. The context propagates with the main tracing context.
+     * 关联上下文，用于跨进程传递用户自定义数据。
      */
     @Getter(AccessLevel.PACKAGE)
     private CorrelationContext correlationContext = new CorrelationContext();
 
     /**
+     * 传递项列表
      * @return the list of items, which could exist in the current tracing context.
      */
     public CarrierItem items() {
+        // 扩展数据项
         SW8ExtensionCarrierItem sw8ExtensionCarrierItem = new SW8ExtensionCarrierItem(extensionContext, null);
+        // 关联数据项
         SW8CorrelationCarrierItem sw8CorrelationCarrierItem = new SW8CorrelationCarrierItem(
             correlationContext, sw8ExtensionCarrierItem);
+        // 标准数据项
         SW8CarrierItem sw8CarrierItem = new SW8CarrierItem(this, sw8CorrelationCarrierItem);
         return new CarrierItemHead(sw8CarrierItem);
     }
