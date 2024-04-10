@@ -30,10 +30,12 @@ import org.apache.skywalking.apm.network.language.agent.v3.SegmentObject;
  * {@link TraceSegment} is a segment or fragment of the distributed trace. See https://github.com/opentracing/specification/blob/master/specification.md#the-opentracing-data-model
  * A {@link TraceSegment} means the segment, which exists in current {@link Thread}. And the distributed trace is formed
  * by multi {@link TraceSegment}s, because the distributed trace crosses multi-processes, multi-threads. <p>
+ * 追踪片段，是分布式跟踪的段或片段。
  */
 public class TraceSegment {
     /**
      * The id of this trace segment. Every segment has its unique-global-id.
+     * 追踪片段身份
      */
     private String traceSegmentId;
 
@@ -43,12 +45,14 @@ public class TraceSegment {
      * we only cache the first parent segment reference.
      * <p>
      * This field will not be serialized. Keeping this field is only for quick accessing.
+     * 追踪片段引用
      */
     private TraceSegmentRef ref;
 
     /**
      * The spans belong to this trace segment. They all have finished. All active spans are hold and controlled by
      * "skywalking-api" module.
+     * 跨度属于此追踪片段。他们都完成了。
      */
     private List<AbstractTracingSpan> spans;
 
@@ -56,6 +60,7 @@ public class TraceSegment {
      * The <code>relatedGlobalTraceId</code> represent the related trace. Most time it related only one
      * element, because only one parent {@link TraceSegment} exists, but, in batch scenario, the num becomes greater
      * than 1, also meaning multi-parents {@link TraceSegment}. But we only related the first parent TraceSegment.
+     * 相关的全局追踪身份
      */
     private DistributedTraceId relatedGlobalTraceId;
 
@@ -63,12 +68,16 @@ public class TraceSegment {
 
     private boolean isSizeLimited = false;
 
+    /**
+     * 创建时间
+     */
     private final long createTime;
 
     /**
      * Create a default/empty trace segment, with current time as start time, and generate a new segment id.
      */
     public TraceSegment() {
+        // 生成一个新的追踪片段身份
         this.traceSegmentId = GlobalIdGenerator.generate();
         this.spans = new LinkedList<>();
         this.relatedGlobalTraceId = new NewDistributedTraceId();
