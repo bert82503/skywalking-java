@@ -18,8 +18,17 @@
 
 package org.apache.skywalking.apm.agent.core.context;
 
+/**
+ * 扩展的数据项
+ */
 public class SW8ExtensionCarrierItem extends CarrierItem {
+    /**
+     * 头信息的键
+     */
     public static final String HEADER_NAME = "sw8-x";
+    /**
+     * 扩展上下文
+     */
     private final ExtensionContext extensionContext;
 
     public SW8ExtensionCarrierItem(ExtensionContext extensionContext, CarrierItem next) {

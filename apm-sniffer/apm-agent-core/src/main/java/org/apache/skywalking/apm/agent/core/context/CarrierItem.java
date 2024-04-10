@@ -20,9 +20,21 @@ package org.apache.skywalking.apm.agent.core.context;
 
 import java.util.Iterator;
 
+/**
+ * 数据传递项
+ */
 public class CarrierItem implements Iterator<CarrierItem> {
+    /**
+     * 头信息的键
+     */
     private String headKey;
+    /**
+     * 头信息的值
+     */
     private String headValue;
+    /**
+     * 下一项，链表结构
+     */
     private CarrierItem next;
 
     public CarrierItem(String headKey, String headValue) {

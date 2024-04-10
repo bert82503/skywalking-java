@@ -17,8 +17,17 @@
 
 package org.apache.skywalking.apm.agent.core.context;
 
+/**
+ * 用户自定义数据的关联数据项
+ */
 public class SW8CorrelationCarrierItem extends CarrierItem {
+    /**
+     * 头信息的键
+     */
     public static final String HEADER_NAME = "sw8-correlation";
+    /**
+     * 关联上下文
+     */
     private final CorrelationContext correlationContext;
 
     public SW8CorrelationCarrierItem(CorrelationContext correlationContext, CarrierItem next) {

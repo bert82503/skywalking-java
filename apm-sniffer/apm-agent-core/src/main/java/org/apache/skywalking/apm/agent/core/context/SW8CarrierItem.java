@@ -18,9 +18,18 @@
 
 package org.apache.skywalking.apm.agent.core.context;
 
+/**
+ * 标准的数据项
+ */
 public class SW8CarrierItem extends CarrierItem {
+    /**
+     * 头信息的键
+     */
     public static final String HEADER_NAME = "sw8";
-    private ContextCarrier carrier;
+    /**
+     * 传递跨进程数据的搬运工
+     */
+    private final ContextCarrier carrier;
 
     public SW8CarrierItem(ContextCarrier carrier, CarrierItem next) {
         super(HEADER_NAME, carrier.serialize(ContextCarrier.HeaderVersion.v3), next);
