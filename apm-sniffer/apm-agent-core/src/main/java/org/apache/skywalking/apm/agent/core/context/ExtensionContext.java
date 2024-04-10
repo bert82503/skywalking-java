@@ -30,6 +30,7 @@ import org.apache.skywalking.apm.util.StringUtil;
 /**
  * Extension context, It provides the interaction capabilities between the agents deployed in upstream and downstream
  * services.
+ * 扩展上下文，提供部署在上游和下游的代理之间的交互能力服务。
  */
 public class ExtensionContext {
 
@@ -44,11 +45,13 @@ public class ExtensionContext {
     private static final String PLACEHOLDER = " ";
     /**
      * Tracing Mode. If true means represents all spans generated in this context should skip analysis.
+     * 追踪模式
      */
     private boolean skipAnalysis;
 
     /**
      * The sending timestamp of the exit span.
+     * 退出跨度的发送时间戳。
      */
     @Getter
     @Setter
