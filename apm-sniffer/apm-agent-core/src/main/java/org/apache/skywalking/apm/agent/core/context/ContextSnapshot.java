@@ -25,15 +25,34 @@ import org.apache.skywalking.apm.agent.core.profile.ProfileStatusContext;
 /**
  * The <code>ContextSnapshot</code> is a snapshot for current context. The snapshot carries the info for building
  * reference between two segments in two thread, but have a causal relationship.
+ * 捕获用于跨线程传播的快照，在这个追踪片段和跨线程段之间构建引用。
  */
 @Getter
 public class ContextSnapshot {
+    /**
+     * 分布式追踪身份
+     */
     private DistributedTraceId traceId;
+    /**
+     * 父追踪片段身份
+     */
     private String traceSegmentId;
+    /**
+     * 父追踪片段中的跨度身份
+     */
     private int spanId;
+    /**
+     * 父服务的端点
+     */
     private String parentEndpoint;
 
+    /**
+     * 关联上下文
+     */
     private CorrelationContext correlationContext;
+    /**
+     * 扩展上下文
+     */
     private ExtensionContext extensionContext;
     private ProfileStatusContext profileStatusContext;
 
@@ -57,6 +76,9 @@ public class ContextSnapshot {
         return traceSegmentId != null && traceSegmentId.equals(ContextManager.capture().getTraceSegmentId());
     }
 
+    /**
+     * 获取关联上下文
+     */
     public CorrelationContext getCorrelationContext() {
         return correlationContext;
     }
