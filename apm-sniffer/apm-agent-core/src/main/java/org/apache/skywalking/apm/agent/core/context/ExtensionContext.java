@@ -51,7 +51,7 @@ public class ExtensionContext {
 
     /**
      * The sending timestamp of the exit span.
-     * 退出跨度的发送时间戳。
+     * 出口跨度的发送时间戳。
      */
     @Getter
     @Setter

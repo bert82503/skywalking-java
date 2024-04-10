@@ -57,6 +57,7 @@ import static org.apache.skywalking.apm.agent.core.conf.Config.Agent.CLUSTER;
  * In skywalking core concept, FOLLOW_OF is an abstract concept when cross-process MQ or cross-thread async/batch tasks
  * happen, we used {@link TraceSegmentRef} for these scenarios. Check {@link TraceSegmentRef} which is from {@link
  * ContextCarrier} or {@link ContextSnapshot}.
+ * 追踪上下文传播，表示内核追踪逻辑控制器。
  */
 public class TracingContext implements AbstractTracerContext {
     private static final ILog LOGGER = LogManager.getLogger(TracingContext.class);
@@ -69,6 +70,7 @@ public class TracingContext implements AbstractTracerContext {
 
     /**
      * The final {@link TraceSegment}, which includes all finished spans.
+     * 最终的追踪片段，包括所有完成的跨度。
      */
     private TraceSegment segment;
 
@@ -76,16 +78,19 @@ public class TracingContext implements AbstractTracerContext {
      * Active spans stored in a Stack, usually called 'ActiveSpanStack'. This {@link LinkedList} is the in-memory
      * storage-structure. <p> I use {@link LinkedList#removeLast()}, {@link LinkedList#addLast(Object)} and {@link
      * LinkedList#getLast()} instead of {@link #pop()}, {@link #push(AbstractSpan)}, {@link #peek()}
+     * 存储在堆栈中的活动跨度
      */
     private LinkedList<AbstractSpan> activeSpanStack = new LinkedList<>();
 
     /**
+     * 主端点
      * @since 8.10.0 replace the removed "firstSpan"(before 8.10.0) reference. see {@link PrimaryEndpoint} for more details.
      */
     private PrimaryEndpoint primaryEndpoint = null;
 
     /**
      * A counter for the next span.
+     * 下一个跨度的计数器
      */
     private int spanIdGenerator;
 
@@ -101,14 +106,23 @@ public class TracingContext implements AbstractTracerContext {
 
     private volatile boolean running;
 
+    /**
+     * 创建时间
+     */
     private final long createTime;
 
     /**
      * profile status
      */
     private final ProfileStatusContext profileStatus;
+    /**
+     * 关联上下文
+     */
     @Getter(AccessLevel.PACKAGE)
     private final CorrelationContext correlationContext;
+    /**
+     * 扩展上下文
+     */
     @Getter(AccessLevel.PACKAGE)
     private final ExtensionContext extensionContext;
 
@@ -137,8 +151,10 @@ public class TracingContext implements AbstractTracerContext {
         this.spanLimitWatcher = spanLimitWatcher;
     }
 
+    // 跨进程传播
     /**
      * Inject the context into the given carrier, only when the active span is an exit one.
+     * 仅当活动跨度为出口跨度时，才将上下文注入给定载体。
      *
      * @param carrier to carry the context for crossing process.
      * @throws IllegalStateException if (1) the active span isn't an exit one. (2) doesn't include peer. Ref to {@link
@@ -183,6 +199,7 @@ public class TracingContext implements AbstractTracerContext {
 
     /**
      * Extract the carrier to build the reference for the pre segment.
+     * 提取操作，从Carrier中获取跨进程通信数据。
      *
      * @param carrier carried the context from a cross-process segment. Ref to {@link AbstractTracerContext#extract(ContextCarrier)}
      */
@@ -200,8 +217,10 @@ public class TracingContext implements AbstractTracerContext {
         carrier.extractCorrelationTo(this);
     }
 
+    // 跨线程传播
     /**
      * Capture the snapshot of current context.
+     * 捕获用于跨线程传播的快照。
      *
      * @return the snapshot of context for cross-thread propagation Ref to {@link AbstractTracerContext#capture()}
      */
@@ -222,6 +241,7 @@ public class TracingContext implements AbstractTracerContext {
 
     /**
      * Continue the context from the given snapshot of parent thread.
+     * 在这个追踪片段和跨线程段之间构建引用。
      *
      * @param snapshot from {@link #capture()} in the parent thread. Ref to {@link AbstractTracerContext#continued(ContextSnapshot)}
      */
@@ -241,7 +261,9 @@ public class TracingContext implements AbstractTracerContext {
         }
     }
 
+    // 三层身份标识
     /**
+     * 获取第一个全局跟踪身份
      * @return the first global trace id.
      */
     @Override
@@ -265,6 +287,7 @@ public class TracingContext implements AbstractTracerContext {
 
     /**
      * Create an entry span
+     * 创建入口跨度
      *
      * @param operationName most likely a service name
      * @return span instance. Ref to {@link EntrySpan}
@@ -300,6 +323,7 @@ public class TracingContext implements AbstractTracerContext {
 
     /**
      * Create a local span
+     * 创建本地跨度
      *
      * @param operationName most likely a local method signature, or business name.
      * @return the span represents a local logic block. Ref to {@link LocalSpan}
@@ -319,6 +343,7 @@ public class TracingContext implements AbstractTracerContext {
 
     /**
      * Create an exit span
+     * 创建出口跨度
      *
      * @param operationName most likely a service name of remote
      * @param remotePeer    the network id(ip:port, hostname:port or ip1:port1,ip2,port, etc.). Remote peer could be set
