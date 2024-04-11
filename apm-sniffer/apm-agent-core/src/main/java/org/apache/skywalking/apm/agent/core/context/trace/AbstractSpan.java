@@ -38,6 +38,7 @@ public interface AbstractSpan extends AsyncSpan {
 
     AbstractSpan setLayer(SpanLayer layer);
 
+    // 跨度标签
     /**
      * Set a key:value tag on the Span.
      *
@@ -48,7 +49,7 @@ public interface AbstractSpan extends AsyncSpan {
     AbstractSpan tag(String key, String value);
 
     /**
-     *
+     * 打标签
      */
     AbstractSpan tag(AbstractTag<?> tag, String value);
 

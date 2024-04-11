@@ -33,7 +33,7 @@ import org.apache.skywalking.apm.util.StringUtil;
 
 /**
  * Correlation context, use to propagation user custom data.
- * 关联上下文，用于传播用户自定义数据。
+ * 关联上下文，用于传播/传递用户自定义数据。
  */
 public class CorrelationContext {
 
@@ -43,6 +43,7 @@ public class CorrelationContext {
     private final Map<String, String> data;
 
     /**
+     * 自动标签的键列表
      * 希望将自定义的参数自动记录到tag中
      */
     private static final List<String> AUTO_TAG_KEYS;
@@ -68,34 +69,42 @@ public class CorrelationContext {
      */
     public Optional<String> put(String key, String value) {
         // key must not null
+        // 键，不能为null
         if (key == null) {
             return Optional.empty();
         }
 
         // remove and return previous value when value is empty
+        // 如果值为空，则移除键并返回先前的值
         if (StringUtil.isEmpty(value)) {
             return Optional.ofNullable(data.remove(key));
         }
 
         // check value length
+        // 校验值的长度
         if (value.length() > Config.Correlation.VALUE_MAX_LENGTH) {
             return Optional.empty();
         }
 
         // already contain key
+        // 已经包含设置的键，则替换值
         if (data.containsKey(key)) {
             final String previousValue = data.put(key, value);
             return Optional.of(previousValue);
         }
 
         // check keys count
+        // 检查键的数量
         if (data.size() >= Config.Correlation.ELEMENT_MAX_NUMBER) {
             return Optional.empty();
         }
+        // 自动标签的键列表
         if (AUTO_TAG_KEYS.contains(key) && ContextManager.isActive()) {
+            // 为当前活动的跨度，打标签(跨度标签)
             ContextManager.activeSpan().tag(new StringTag(key), value);
         }
         // setting
+        // 设置用户自定义数据到关联上下文中
         data.put(key, value);
         return Optional.empty();
     }

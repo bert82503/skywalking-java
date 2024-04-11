@@ -235,6 +235,9 @@ public class ContextManager implements BootService {
 
     }
 
+    /**
+     * @return 追踪上下文是活动状态
+     */
     public static boolean isActive() {
         return get() != null;
     }
