@@ -36,15 +36,21 @@ import static org.apache.skywalking.apm.agent.core.conf.Config.Agent.OPERATION_N
  * TraceSegment} starts, all ChildOf spans are in the same context. <p> What is 'ChildOf'?
  * https://github.com/opentracing/specification/blob/master/specification.md#references-between-spans
  *
+ * 上下文管理者，控制追踪片段的整个上下文。
+ *
  * <p> Also, {@link ContextManager} delegates to all {@link AbstractTracerContext}'s major methods.
  */
 public class ContextManager implements BootService {
     private static final String EMPTY_TRACE_CONTEXT_ID = "N/A";
     private static final ILog LOGGER = LogManager.getLogger(ContextManager.class);
+    /**
+     * 追踪上下文的线程本地变量
+     */
     private static ThreadLocal<AbstractTracerContext> CONTEXT = new ThreadLocal<AbstractTracerContext>();
     private static ThreadLocal<RuntimeContext> RUNTIME_CONTEXT = new ThreadLocal<RuntimeContext>();
     private static ContextManagerExtendService EXTEND_SERVICE;
 
+    // 追踪上下文
     private static AbstractTracerContext getOrCreate(String operationName, boolean forceSampling) {
         AbstractTracerContext context = CONTEXT.get();
         if (context == null) {
@@ -69,6 +75,7 @@ public class ContextManager implements BootService {
         return CONTEXT.get();
     }
 
+    // 三层身份标识
     /**
      * @return the first global trace id when tracing. Otherwise, "N/A".
      */
@@ -101,6 +108,7 @@ public class ContextManager implements BootService {
         return Objects.nonNull(context) ? context.getPrimaryEndpointName() : null;
     }
 
+    // 创建跨度
     public static AbstractSpan createEntrySpan(String operationName, ContextCarrier carrier) {
         AbstractSpan span;
         AbstractTracerContext context;
@@ -141,6 +149,7 @@ public class ContextManager implements BootService {
         return context.createExitSpan(operationName, remotePeer);
     }
 
+    // 跨进程传递
     public static void inject(ContextCarrier carrier) {
         get().inject(carrier);
     }
@@ -154,6 +163,7 @@ public class ContextManager implements BootService {
         }
     }
 
+    // 跨线程传递
     public static ContextSnapshot capture() {
         return get().capture();
     }
@@ -176,6 +186,7 @@ public class ContextManager implements BootService {
         return context.awaitFinishAsync();
     }
 
+    // 跨度
     /**
      * Using this method will cause NPE if active span does not exist. If one is not sure whether there is an active span, use
      * ContextManager::isActive method to determine whether there has the active span.
@@ -228,6 +239,9 @@ public class ContextManager implements BootService {
         return get() != null;
     }
 
+    /**
+     * @return 运行时上下文
+     */
     public static RuntimeContext getRuntimeContext() {
         RuntimeContext runtimeContext = RUNTIME_CONTEXT.get();
         if (runtimeContext == null) {
@@ -238,6 +252,9 @@ public class ContextManager implements BootService {
         return runtimeContext;
     }
 
+    /**
+     * @return 关联上下文
+     */
     public static CorrelationContext getCorrelationContext() {
         final AbstractTracerContext tracerContext = get();
         if (tracerContext == null) {
