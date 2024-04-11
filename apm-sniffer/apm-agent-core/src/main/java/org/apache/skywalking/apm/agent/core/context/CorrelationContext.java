@@ -62,6 +62,7 @@ public class CorrelationContext {
 
     /**
      * Add or override the context.
+     * 设置或覆盖用户自定义数据
      *
      * @param key   to add or locate the existing context
      * @param value as new value
@@ -110,6 +111,7 @@ public class CorrelationContext {
     }
 
     /**
+     * 获取用户自定义数据
      * @param key to find the context
      * @return value if exist.
      */
