@@ -105,6 +105,8 @@ public class SkyWalkingAgent {
         // 开始安装类字节码转换器
         LOGGER.info("Skywalking agent begin to install transformer ...");
 
+        // 新的代理构建者
+        // 过滤不需要增强的类
         AgentBuilder agentBuilder = newAgentBuilder().ignore(
             nameStartsWith("net.bytebuddy.")
                 .or(nameStartsWith("org.slf4j."))
@@ -131,6 +133,7 @@ public class SkyWalkingAgent {
             return;
         }
 
+        // 基于byte-buddy增强字节码
         agentBuilder.type(pluginFinder.buildMatch())
                     .transform(new Transformer(pluginFinder))
                     .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
@@ -138,6 +141,7 @@ public class SkyWalkingAgent {
                     .with(new Listener())
                     .installOn(instrumentation);
 
+        // 插件初始化完成
         PluginFinder.pluginInitCompleted();
 
         // 类字节码转换器已安装完成
@@ -160,6 +164,7 @@ public class SkyWalkingAgent {
      * {@link SWAuxiliaryTypeNamingStrategy} {@link DelegateNamingResolver} {@link SWMethodNameTransformer} and {@link SWImplementationContextFactory}
      */
     private static AgentBuilder newAgentBuilder() {
+        // 新的代理构建者
         final ByteBuddy byteBuddy = new ByteBuddy()
                 .with(TypeValidation.of(Config.Agent.IS_OPEN_DEBUGGING_CLASS))
                 .with(new SWAuxiliaryTypeNamingStrategy(NAME_TRAIT))
