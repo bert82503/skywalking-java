@@ -18,10 +18,36 @@
 
 package org.apache.skywalking.apm.agent.core.context.trace;
 
+/**
+ * 跨度分层
+ */
 public enum SpanLayer {
-    DB(1), RPC_FRAMEWORK(2), HTTP(3), MQ(4), CACHE(5);
+    /**
+     * 数据库
+     */
+    DB(1),
+    /**
+     * rpc框架
+     */
+    RPC_FRAMEWORK(2),
+    /**
+     * http
+     */
+    HTTP(3),
+    /**
+     * 消息队列
+     */
+    MQ(4),
+    /**
+     * 缓存
+     */
+    CACHE(5),
+    ;
 
-    private int code;
+    /**
+     * 分层编码
+     */
+    private final int code;
 
     SpanLayer(int code) {
         this.code = code;
@@ -30,6 +56,8 @@ public enum SpanLayer {
     public int getCode() {
         return code;
     }
+
+    // 设置分层
 
     public static void asDB(AbstractSpan span) {
         span.setLayer(SpanLayer.DB);

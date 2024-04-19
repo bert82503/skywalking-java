@@ -21,13 +21,20 @@ package org.apache.skywalking.apm.agent.core.context.tag;
 import java.util.Objects;
 import org.apache.skywalking.apm.agent.core.context.trace.AbstractSpan;
 
+/**
+ * 标签【实体】
+ */
 public abstract class AbstractTag<T> {
 
-    private int id;
+    /**
+     * 身份
+     */
+    private final int id;
 
-    private boolean canOverwrite;
+    private final boolean canOverwrite;
     /**
      * The key of this Tag.
+     * 标签的键
      */
     protected final String key;
 

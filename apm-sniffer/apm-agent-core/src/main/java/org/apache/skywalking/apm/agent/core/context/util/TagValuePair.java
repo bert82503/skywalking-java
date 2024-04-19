@@ -21,8 +21,14 @@ import java.util.Objects;
 import org.apache.skywalking.apm.agent.core.context.tag.AbstractTag;
 import org.apache.skywalking.apm.network.common.v3.KeyStringValuePair;
 
+/**
+ * 标签的键值对
+ */
 public class TagValuePair {
-    private AbstractTag key;
+    /**
+     * 标签的键
+     */
+    private final AbstractTag key;
     private String value;
 
     public TagValuePair(AbstractTag tag, String value) {
