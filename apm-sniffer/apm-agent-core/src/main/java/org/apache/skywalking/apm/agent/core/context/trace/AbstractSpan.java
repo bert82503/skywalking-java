@@ -27,15 +27,21 @@ import org.apache.skywalking.apm.network.trace.component.ComponentsDefine;
 
 /**
  * The <code>AbstractSpan</code> represents the span's skeleton, which contains all open methods.
+ * 抽象的跨度，表示跨度的实现骨架，它包含所有开放方法。
  */
 public interface AbstractSpan extends AsyncSpan {
     /**
      * Set the component id, which defines in {@link ComponentsDefine}
+     * 设置组件ID
      *
      * @return the span for chaining.
      */
     AbstractSpan setComponent(Component component);
 
+    /**
+     * 设置跨度分层
+     * @param layer 跨度分层
+     */
     AbstractSpan setLayer(SpanLayer layer);
 
     // 跨度标签
@@ -49,12 +55,14 @@ public interface AbstractSpan extends AsyncSpan {
     AbstractSpan tag(String key, String value);
 
     /**
-     * 打标签
+     * 打跨度标签
+     * 在跨度上设置键值对的标签。
      */
     AbstractSpan tag(AbstractTag<?> tag, String value);
 
     /**
      * Record an exception event of the current walltime timestamp.
+     * 记录当前墙时间戳的异常事件。
      *
      * @param t any subclass of {@link Throwable}, which occurs in this span.
      * @return the Span, for chaining
@@ -64,17 +72,20 @@ public interface AbstractSpan extends AsyncSpan {
     AbstractSpan errorOccurred();
 
     /**
+     * 实际跨度是入口跨度么？
      * @return true if the actual span is an entry span.
      */
     boolean isEntry();
 
     /**
+     * 实际跨度是出口跨度么？
      * @return true if the actual span is an exit span.
      */
     boolean isExit();
 
     /**
      * Record an event at a specific timestamp.
+     * 在特定时间戳记录事件。
      *
      * @param timestamp The explicit timestamp for the log record.
      * @param event     the events
@@ -84,6 +95,7 @@ public interface AbstractSpan extends AsyncSpan {
 
     /**
      * Sets the string name for the logical operation this span represents.
+     * 设置这个跨度表示的逻辑操作名称
      *
      * @return this Span instance, for chaining
      */
@@ -91,6 +103,7 @@ public interface AbstractSpan extends AsyncSpan {
 
     /**
      * Start a span.
+     * 启动跨度
      *
      * @return this Span instance, for chaining
      */
@@ -98,6 +111,7 @@ public interface AbstractSpan extends AsyncSpan {
 
     /**
      * Get the id of span
+     * 获取跨度ID
      *
      * @return id value.
      */
@@ -107,6 +121,7 @@ public interface AbstractSpan extends AsyncSpan {
 
     /**
      * Reference other trace segment.
+     * 引用其它跨度片段
      *
      * @param ref segment ref
      */

@@ -30,12 +30,14 @@ import org.apache.skywalking.apm.network.language.agent.v3.SegmentObject;
  * {@link TraceSegment} is a segment or fragment of the distributed trace. See https://github.com/opentracing/specification/blob/master/specification.md#the-opentracing-data-model
  * A {@link TraceSegment} means the segment, which exists in current {@link Thread}. And the distributed trace is formed
  * by multi {@link TraceSegment}s, because the distributed trace crosses multi-processes, multi-threads. <p>
- * 追踪片段，是分布式跟踪的段或片段。
+ * 追踪片段，是分布式追踪的段或片段。
+ * 分布式追踪跨越多进程、多线程。
  */
 public class TraceSegment {
     /**
      * The id of this trace segment. Every segment has its unique-global-id.
-     * 追踪片段身份
+     * 追踪片段ID
+     * 每个片段都有其唯一的全局ID。
      */
     private String traceSegmentId;
 
@@ -52,7 +54,8 @@ public class TraceSegment {
     /**
      * The spans belong to this trace segment. They all have finished. All active spans are hold and controlled by
      * "skywalking-api" module.
-     * 跨度属于此追踪片段。他们都完成了。
+     * 这些跨度属于这个追踪片段。
+     * 它们都完成了。所有活动跨度均由“skywalking-api”模块保持和控制。
      */
     private List<AbstractTracingSpan> spans;
 

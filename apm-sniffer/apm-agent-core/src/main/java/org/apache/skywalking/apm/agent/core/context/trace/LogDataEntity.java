@@ -27,6 +27,7 @@ import org.apache.skywalking.apm.network.language.agent.v3.Log;
 /**
  * The <code>LogDataEntity</code> represents a collection of {@link KeyValuePair}, contains several fields of a logging
  * operation.
+ * 日志数据实体，包含多个字段的一个日志操作。
  */
 public class LogDataEntity {
     private long timestamp;
