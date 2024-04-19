@@ -29,6 +29,8 @@ import org.apache.skywalking.apm.agent.core.logging.api.LogManager;
 /**
  * Plugins finder. Use {@link PluginResourcesResolver} to find all plugins, and ask {@link PluginCfg} to load all plugin
  * definitions.
+ * 插件引导，插件查找器。
+ * 使用插件资源解析器查找所有插件，并要求插件配置加载所有插件定义。
  */
 public class PluginBootstrap {
     private static final ILog LOGGER = LogManager.getLogger(PluginBootstrap.class);
@@ -43,6 +45,7 @@ public class PluginBootstrap {
         // 代理类加载器初始化
         AgentClassLoader.initDefaultLoader();
 
+        // 插件资源
         PluginResourcesResolver resolver = new PluginResourcesResolver();
         List<URL> resources = resolver.getResources();
 
@@ -51,6 +54,7 @@ public class PluginBootstrap {
             return new ArrayList<AbstractClassEnhancePluginDefine>();
         }
 
+        // 插件列表
         for (URL pluginUrl : resources) {
             try {
                 PluginCfg.INSTANCE.load(pluginUrl.openStream());
@@ -59,12 +63,16 @@ public class PluginBootstrap {
             }
         }
 
+        // 插件定义列表
         List<PluginDefine> pluginClassList = PluginCfg.INSTANCE.getPluginClassList();
 
+        // 类增强的插件定义列表
         List<AbstractClassEnhancePluginDefine> plugins = new ArrayList<AbstractClassEnhancePluginDefine>();
         for (PluginDefine pluginDefine : pluginClassList) {
             try {
+                // 加载插件类中
                 LOGGER.debug("loading plugin class {}.", pluginDefine.getDefineClass());
+                // 类增强的插件定义
                 AbstractClassEnhancePluginDefine plugin = (AbstractClassEnhancePluginDefine) Class.forName(pluginDefine.getDefineClass(), true, AgentClassLoader
                     .getDefault()).newInstance();
                 plugins.add(plugin);
@@ -73,10 +81,10 @@ public class PluginBootstrap {
             }
         }
 
+        // 加载所有动态的插件
         plugins.addAll(DynamicPluginLoader.INSTANCE.load(AgentClassLoader.getDefault()));
 
         return plugins;
-
     }
 
 }
