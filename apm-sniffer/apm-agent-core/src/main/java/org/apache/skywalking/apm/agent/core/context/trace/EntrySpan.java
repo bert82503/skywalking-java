@@ -24,9 +24,11 @@ import org.apache.skywalking.apm.network.trace.component.Component;
 
 /**
  * The <code>EntrySpan</code> represents a service provider point, such as Tomcat server entrance.
+ * 入口跨度，表示服务提供者点，例如Tomcat服务器入口。
  * <p>
  * It is a start point of {@link TraceSegment}, even in a complex application, there maybe have multi-layer entry point,
  * the <code>EntrySpan</code> only represents the first one.
+ * 它是追踪片段的起点，即使在复杂的应用程序中，也可能有多层入口点，EntrySpan只代表第一个入口点。
  * <p>
  * But with the last <code>EntrySpan</code>'s tags and logs, which have more details about a service provider.
  * <p>
@@ -34,6 +36,9 @@ import org.apache.skywalking.apm.network.trace.component.Component;
  */
 public class EntrySpan extends StackBasedTracingSpan {
 
+    /**
+     * 当前最大深度
+     */
     private int currentMaxDepth;
 
     public EntrySpan(int spanId, int parentSpanId, String operationName, TracingContext owner) {
@@ -47,14 +52,17 @@ public class EntrySpan extends StackBasedTracingSpan {
     @Override
     public EntrySpan start() {
         if ((currentMaxDepth = ++stackDepth) == 1) {
+            // 第一个入口点
             super.start();
         }
+        // 重新开始时，清理
         clearWhenRestart();
         return this;
     }
 
     @Override
     public EntrySpan tag(String key, String value) {
+        // 当前跨度
         if (stackDepth == currentMaxDepth || isInAsyncMode) {
             super.tag(key, value);
         }
@@ -63,6 +71,7 @@ public class EntrySpan extends StackBasedTracingSpan {
 
     @Override
     public AbstractTracingSpan setLayer(SpanLayer layer) {
+        // 当前跨度
         if (stackDepth == currentMaxDepth || isInAsyncMode) {
             return super.setLayer(layer);
         } else {
@@ -72,6 +81,7 @@ public class EntrySpan extends StackBasedTracingSpan {
 
     @Override
     public AbstractTracingSpan setComponent(Component component) {
+        // 当前跨度
         if (stackDepth == currentMaxDepth || isInAsyncMode) {
             return super.setComponent(component);
         } else {
@@ -81,6 +91,7 @@ public class EntrySpan extends StackBasedTracingSpan {
 
     @Override
     public AbstractTracingSpan setOperationName(String operationName) {
+        // 当前跨度
         if (stackDepth == currentMaxDepth || isInAsyncMode) {
             return super.setOperationName(operationName);
         } else {
@@ -96,11 +107,13 @@ public class EntrySpan extends StackBasedTracingSpan {
 
     @Override
     public boolean isEntry() {
+        // 是入口跨度
         return true;
     }
 
     @Override
     public boolean isExit() {
+        // 不是出口跨度
         return false;
     }
 

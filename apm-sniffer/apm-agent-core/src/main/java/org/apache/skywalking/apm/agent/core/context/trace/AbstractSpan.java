@@ -129,6 +129,10 @@ public interface AbstractSpan extends AsyncSpan {
 
     AbstractSpan start(long startTime);
 
+    /**
+     * 本请求的目标地址
+     * @param remotePeer 远程目标地址
+     */
     AbstractSpan setPeer(String remotePeer);
 
     /**

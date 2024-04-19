@@ -25,9 +25,11 @@ import org.apache.skywalking.apm.network.trace.component.Component;
 
 /**
  * The <code>ExitSpan</code> represents a service consumer point, such as Feign, Okhttp client for an Http service.
+ * 出口跨度，表示一个服务使用者点，例如HTTP服务的Okhttp客户端。
  * <p>
  * It is an exit point or a leaf span(our old name) of trace tree. In a single rpc call, because of a combination of
  * discovery libs, there maybe contain multi-layer exit point:
+ * 它是追踪树的出口点。在单个rpc调用中，由于发现库的组合，可能包含多层退出点。
  * <p>
  * The <code>ExitSpan</code> only presents the first one.
  * <p>
@@ -50,6 +52,7 @@ public class ExitSpan extends StackBasedTracingSpan implements ExitTypeSpan {
     @Override
     public ExitSpan start() {
         if (++stackDepth == 1) {
+            // 堆栈已全部被弹出，重新开始
             super.start();
         }
         return this;
@@ -117,11 +120,13 @@ public class ExitSpan extends StackBasedTracingSpan implements ExitTypeSpan {
 
     @Override
     public boolean isEntry() {
+        // 不是入口跨度
         return false;
     }
 
     @Override
     public boolean isExit() {
+        // 是出口跨度
         return true;
     }
 }

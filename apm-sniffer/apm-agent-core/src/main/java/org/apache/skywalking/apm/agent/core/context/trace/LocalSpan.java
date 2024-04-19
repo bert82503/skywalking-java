@@ -22,6 +22,7 @@ import org.apache.skywalking.apm.agent.core.context.TracingContext;
 
 /**
  * The <code>LocalSpan</code> represents a normal tracing point, such as a local method.
+ * 本地跨度，表示普通追踪点，例如本地方法。
  */
 public class LocalSpan extends AbstractTracingSpan {
 
@@ -31,16 +32,19 @@ public class LocalSpan extends AbstractTracingSpan {
 
     @Override
     public boolean isEntry() {
+        // 不是入口跨度
         return false;
     }
 
     @Override
     public boolean isExit() {
+        // 不是出口跨度
         return false;
     }
 
     @Override
     public AbstractSpan setPeer(String remotePeer) {
+        // 本请求的目标地址是当前进程
         return this;
     }
 }

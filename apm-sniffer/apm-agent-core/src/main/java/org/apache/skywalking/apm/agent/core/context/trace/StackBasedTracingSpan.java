@@ -28,7 +28,13 @@ import org.apache.skywalking.apm.util.StringUtil;
  * This kind of span can start and finish multi times in a stack-like invoke line.
  */
 public abstract class StackBasedTracingSpan extends AbstractTracingSpan {
+    /**
+     * 堆栈深度
+     */
     protected int stackDepth;
+    /**
+     * 本请求的目标地址
+     */
     protected String peer;
 
     protected StackBasedTracingSpan(int spanId, int parentSpanId, String operationName, TracingContext owner) {
@@ -55,6 +61,7 @@ public abstract class StackBasedTracingSpan extends AbstractTracingSpan {
     @Override
     public boolean finish(TraceSegment owner) {
         if (--stackDepth == 0) {
+            // 跨度堆栈元素已全部被弹出
             return super.finish(owner);
         } else {
             return false;
