@@ -35,19 +35,19 @@ import org.apache.skywalking.apm.util.StringUtil;
 @Setter(AccessLevel.PACKAGE)
 public class ContextCarrier implements Serializable {
     /**
-     * 追踪身份
+     * 追踪ID
      */
     @Getter
     private String traceId;
     /**
      * The segment id of the parent.
-     * 父追踪片段身份
+     * 父追踪片段ID
      */
     @Getter
     private String traceSegmentId;
     /**
      * The span id in the parent segment.
-     * 父追踪片段中的跨度身份
+     * 父追踪片段中的跨度ID
      */
     @Getter
     private int spanId = -1;
@@ -69,7 +69,7 @@ public class ContextCarrier implements Serializable {
     private String parentEndpoint;
     /**
      * The network address(ip:port, hostname:port) used in the parent service to access the current service.
-     * 客户端的网络地址
+     * 客户端使用的地址
      */
     @Getter
     private String addressUsedAtClient;
@@ -170,7 +170,7 @@ public class ContextCarrier implements Serializable {
                     this.parentEndpoint = Base64.decode2UTFString(parts[6]);
                     this.addressUsedAtClient = Base64.decode2UTFString(parts[7]);
                 } catch (IllegalArgumentException ignored) {
-
+                    // ignored
                 }
             }
         }
@@ -190,7 +190,7 @@ public class ContextCarrier implements Serializable {
         if (HeaderVersion.v3 == version) {
             return StringUtil.isNotEmpty(traceId)
                 && StringUtil.isNotEmpty(traceSegmentId)
-                && getSpanId() > -1
+                && getSpanId() >= 0
                 && StringUtil.isNotEmpty(parentService)
                 && StringUtil.isNotEmpty(parentServiceInstance)
                 && StringUtil.isNotEmpty(parentEndpoint)
