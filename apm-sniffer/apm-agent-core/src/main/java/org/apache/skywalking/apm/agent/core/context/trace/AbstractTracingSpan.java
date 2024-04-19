@@ -40,18 +40,30 @@ import org.apache.skywalking.apm.network.trace.component.Component;
 /**
  * The <code>AbstractTracingSpan</code> represents a group of {@link AbstractSpan} implementations, which belongs a real
  * distributed trace.
+ * 抽象的追踪跨度，表示一组抽象的跨度实现，它属于真实的分布式追踪。
  */
 public abstract class AbstractTracingSpan implements AbstractSpan {
     /**
      * Span id starts from 0.
+     * 跨度ID
      */
     protected int spanId;
     /**
      * Parent span id starts from 0. -1 means no parent span.
+     * 父跨度ID
      */
     protected int parentSpanId;
+    /**
+     * 跨度标签列表
+     */
     protected List<TagValuePair> tags;
+    /**
+     * 操作名称
+     */
     protected String operationName;
+    /**
+     * 跨度分层
+     */
     protected SpanLayer layer;
     /**
      * The span has been tagged in async mode, required async stop to finish.
@@ -64,26 +76,34 @@ public abstract class AbstractTracingSpan implements AbstractSpan {
 
     /**
      * The context to which the span belongs
+     * 跨度所属的追踪上下文
      */
     protected final TracingContext owner;
 
     /**
      * The start time of this Span.
+     * 这个跨度的开始时间
      */
     protected long startTime;
     /**
      * The end time of this Span.
+     * 这个跨度的结束时间
      */
     protected long endTime;
     /**
      * Error has occurred in the scope of span.
+     * 跨度范围内发生的错误
      */
     protected boolean errorOccurred = false;
 
+    /**
+     * 组件id
+     */
     protected int componentId = 0;
 
     /**
      * Log is a concept from OpenTracing spec. https://github.com/opentracing/specification/blob/master/specification.md#log-structured-data
+     * 日志是开放追踪规范中的一个概念
      */
     protected List<LogDataEntity> logs;
 
@@ -91,6 +111,7 @@ public abstract class AbstractTracingSpan implements AbstractSpan {
      * The refs of parent trace segments, except the primary one. For most RPC call, {@link #refs} contains only one
      * element, but if this segment is a start span of batch process, the segment faces multi parents, at this moment,
      * we use this {@link #refs} to link them.
+     * 父追踪片段的引用，主要追踪片段除外。
      */
     protected List<TraceSegmentRef> refs;
 
@@ -108,6 +129,7 @@ public abstract class AbstractTracingSpan implements AbstractSpan {
 
     /**
      * Set a key:value tag on the Span.
+     * 在跨度上设置键值对的标签。
      * <p>
      * {@inheritDoc}
      *
@@ -140,6 +162,7 @@ public abstract class AbstractTracingSpan implements AbstractSpan {
     /**
      * Finish the active Span. When it is finished, it will be archived by the given {@link TraceSegment}, which owners
      * it.
+     * 完成活动跨度
      *
      * @param owner of the Span.
      */
@@ -157,6 +180,7 @@ public abstract class AbstractTracingSpan implements AbstractSpan {
 
     /**
      * Record an exception event of the current walltime timestamp.
+     * 记录当前墙时间戳的异常事件。
      *
      * @param t any subclass of {@link Throwable}, which occurs in this span.
      * @return the Span, for chaining
