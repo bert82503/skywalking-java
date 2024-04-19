@@ -27,15 +27,21 @@ import java.util.ServiceLoader;
 
 /**
  * The plugin can be inserted into the kernel by implementing this spi return PluginDefine list.
+ * 动态的插件加载者
  */
 
 public enum DynamicPluginLoader {
 
+    /**
+     * 单例
+     */
     INSTANCE;
 
     public List<AbstractClassEnhancePluginDefine> load(AgentClassLoader classLoader) {
         List<AbstractClassEnhancePluginDefine> all = new ArrayList<AbstractClassEnhancePluginDefine>();
-        for (InstrumentationLoader instrumentationLoader : ServiceLoader.load(InstrumentationLoader.class, classLoader)) {
+        // 插装加载器的服务加载者
+        ServiceLoader<InstrumentationLoader> instrumentationLoaderServiceLoader = ServiceLoader.load(InstrumentationLoader.class, classLoader);
+        for (InstrumentationLoader instrumentationLoader : instrumentationLoaderServiceLoader) {
             List<AbstractClassEnhancePluginDefine> plugins = instrumentationLoader.load(classLoader);
             if (plugins != null && !plugins.isEmpty()) {
                 all.addAll(plugins);
