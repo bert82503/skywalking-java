@@ -47,6 +47,7 @@ public class TraceSegmentRef {
     private String traceSegmentId;
     /**
      * 父跨度ID
+     * 父片段中的跨度ID
      */
     private int spanId;
     /**

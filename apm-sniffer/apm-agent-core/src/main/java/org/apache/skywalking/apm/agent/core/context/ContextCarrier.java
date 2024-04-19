@@ -47,7 +47,8 @@ public class ContextCarrier implements Serializable {
     private String traceSegmentId;
     /**
      * The span id in the parent segment.
-     * 父追踪片段中的跨度ID
+     * 父跨度ID
+     * 父片段中的跨度ID
      */
     @Getter
     private int spanId = -1;

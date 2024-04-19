@@ -30,15 +30,16 @@ import org.apache.skywalking.apm.agent.core.profile.ProfileStatusContext;
 @Getter
 public class ContextSnapshot {
     /**
-     * 分布式追踪身份
+     * 追踪ID
      */
     private DistributedTraceId traceId;
     /**
-     * 父追踪片段身份
+     * 父追踪片段ID
      */
     private String traceSegmentId;
     /**
-     * 父追踪片段中的跨度身份
+     * 父跨度ID
+     * 父片段中的跨度ID
      */
     private int spanId;
     /**
