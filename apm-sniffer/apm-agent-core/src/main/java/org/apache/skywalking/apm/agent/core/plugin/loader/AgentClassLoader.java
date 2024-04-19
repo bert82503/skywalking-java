@@ -43,12 +43,14 @@ import org.apache.skywalking.apm.agent.core.plugin.PluginBootstrap;
 
 /**
  * The <code>AgentClassLoader</code> represents a classloader, which is in charge of finding plugins and interceptors.
+ * 代理的类加载器，表示一个类加载器，负责查找插件和拦截器。
  */
 public class AgentClassLoader extends ClassLoader {
 
     static {
         /*
          * Try to solve the classloader dead lock. See https://github.com/apache/skywalking/pull/2016
+         * 注册为并行加载功能
          */
         registerAsParallelCapable();
     }
@@ -56,6 +58,7 @@ public class AgentClassLoader extends ClassLoader {
     private static final ILog LOGGER = LogManager.getLogger(AgentClassLoader.class);
     /**
      * The default class loader for the agent.
+     * 默认的代理的类加载器
      */
     private static AgentClassLoader DEFAULT_LOADER;
 
@@ -63,19 +66,25 @@ public class AgentClassLoader extends ClassLoader {
     private List<Jar> allJars;
     private ReentrantLock jarScanLock = new ReentrantLock();
 
+    /**
+     * 返回默认的代理的类加载器。
+     */
     public static AgentClassLoader getDefault() {
         return DEFAULT_LOADER;
     }
 
     /**
      * Init the default class loader.
+     * 初始化默认的代理的类加载器。
      *
      * @throws AgentPackageNotFoundException if agent package is not found.
      */
     public static void initDefaultLoader() throws AgentPackageNotFoundException {
+        // 双重检查+同步
         if (DEFAULT_LOADER == null) {
             synchronized (AgentClassLoader.class) {
                 if (DEFAULT_LOADER == null) {
+                    // 父加载器为插件引导类加载器
                     DEFAULT_LOADER = new AgentClassLoader(PluginBootstrap.class.getClassLoader());
                 }
             }
@@ -84,6 +93,7 @@ public class AgentClassLoader extends ClassLoader {
 
     public AgentClassLoader(ClassLoader parent) throws AgentPackageNotFoundException {
         super(parent);
+        // 代理的包路径
         File agentDictionary = AgentPackagePath.getPath();
         classpath = new LinkedList<>();
         Config.Plugin.MOUNT.forEach(mountFolder -> classpath.add(new File(agentDictionary, mountFolder)));
