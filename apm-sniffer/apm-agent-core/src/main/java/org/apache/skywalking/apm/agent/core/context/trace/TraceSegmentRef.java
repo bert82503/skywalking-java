@@ -38,15 +38,15 @@ public class TraceSegmentRef {
      */
     private SegmentRefType type;
     /**
-     * 追踪身份
+     * 追踪ID
      */
     private String traceId;
     /**
-     * 父追踪片段身份
+     * 父追踪片段ID
      */
     private String traceSegmentId;
     /**
-     * 父追踪片段中的跨度身份
+     * 父跨度ID
      */
     private int spanId;
     /**
@@ -62,7 +62,7 @@ public class TraceSegmentRef {
      */
     private String parentEndpoint;
     /**
-     * 客户端的网络地址
+     * 客户端使用的地址
      */
     private String addressUsedAtClient;
 
@@ -135,6 +135,9 @@ public class TraceSegmentRef {
         return result;
     }
 
+    /**
+     * 片段引用类型
+     */
     public enum SegmentRefType {
         /**
          * 跨进程
