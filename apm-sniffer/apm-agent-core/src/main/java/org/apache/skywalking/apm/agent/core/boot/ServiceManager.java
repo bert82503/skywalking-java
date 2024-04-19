@@ -31,24 +31,39 @@ import org.apache.skywalking.apm.agent.core.plugin.loader.AgentClassLoader;
 
 /**
  * The <code>ServiceManager</code> bases on {@link ServiceLoader}, load all {@link BootService} implementations.
+ * 服务管理者，基于服务加载者，加载所有启动服务实现。
  */
 public enum ServiceManager {
+    /**
+     * 单例
+     */
     INSTANCE;
 
     private static final ILog LOGGER = LogManager.getLogger(ServiceManager.class);
-    private Map<Class, BootService> bootedServices = Collections.emptyMap();
+    /**
+     * 所有启动的服务的映射表
+     */
+    private Map<Class<? extends BootService>, BootService> bootedServices = Collections.emptyMap();
 
     public void boot() {
+        // 加载所有启动服务
         bootedServices = loadAllServices();
 
+        // 准备阶段
         prepare();
+        // 启动阶段
         startup();
+        // 完成阶段
         onComplete();
     }
 
+    /**
+     * 关闭阶段
+     */
     public void shutdown() {
         bootedServices.values().stream().sorted(Comparator.comparingInt(BootService::priority).reversed()).forEach(service -> {
             try {
+                // 关闭启动服务
                 service.shutdown();
             } catch (Throwable e) {
                 LOGGER.error(e, "ServiceManager try to shutdown [{}] fail.", service.getClass().getName());
@@ -56,12 +71,18 @@ public enum ServiceManager {
         });
     }
 
-    private Map<Class, BootService> loadAllServices() {
-        Map<Class, BootService> bootedServices = new LinkedHashMap<>();
+    /**
+     * 加载所有启动服务
+     */
+    private Map<Class<? extends BootService>, BootService> loadAllServices() {
+        Map<Class<? extends BootService>, BootService> bootedServices = new LinkedHashMap<>();
         List<BootService> allServices = new LinkedList<>();
+        // 加载所有启动服务
         load(allServices);
+        // 默认/覆盖的实现者机制
         for (final BootService bootService : allServices) {
             Class<? extends BootService> bootServiceClass = bootService.getClass();
+            // 默认的实现者
             boolean isDefaultImplementor = bootServiceClass.isAnnotationPresent(DefaultImplementor.class);
             if (isDefaultImplementor) {
                 if (!bootedServices.containsKey(bootServiceClass)) {
@@ -70,6 +91,7 @@ public enum ServiceManager {
                     //ignore the default service
                 }
             } else {
+                // 覆盖的实现者
                 OverrideImplementor overrideImplementor = bootServiceClass.getAnnotation(OverrideImplementor.class);
                 if (overrideImplementor == null) {
                     if (!bootedServices.containsKey(bootServiceClass)) {
@@ -99,9 +121,13 @@ public enum ServiceManager {
         return bootedServices;
     }
 
+    /**
+     * 准备阶段
+     */
     private void prepare() {
         bootedServices.values().stream().sorted(Comparator.comparingInt(BootService::priority)).forEach(service -> {
             try {
+                // 启动服务的准备阶段
                 service.prepare();
             } catch (Throwable e) {
                 LOGGER.error(e, "ServiceManager try to pre-start [{}] fail.", service.getClass().getName());
@@ -109,9 +135,13 @@ public enum ServiceManager {
         });
     }
 
+    /**
+     * 启动阶段
+     */
     private void startup() {
         bootedServices.values().stream().sorted(Comparator.comparingInt(BootService::priority)).forEach(service -> {
             try {
+                // 启动服务的启动阶段
                 service.boot();
             } catch (Throwable e) {
                 LOGGER.error(e, "ServiceManager try to start [{}] fail.", service.getClass().getName());
@@ -119,9 +149,13 @@ public enum ServiceManager {
         });
     }
 
+    /**
+     * 完成阶段
+     */
     private void onComplete() {
         for (BootService service : bootedServices.values()) {
             try {
+                // 启动服务的完成阶段
                 service.onComplete();
             } catch (Throwable e) {
                 LOGGER.error(e, "Service [{}] AfterBoot process fails.", service.getClass().getName());
@@ -131,6 +165,7 @@ public enum ServiceManager {
 
     /**
      * Find a {@link BootService} implementation, which is already started.
+     * 查找已启动的 BootService 实现。
      *
      * @param serviceClass class name.
      * @param <T>          {@link BootService} implementation class.
@@ -140,8 +175,13 @@ public enum ServiceManager {
         return (T) bootedServices.get(serviceClass);
     }
 
+    /**
+     * 加载所有启动服务
+     */
     void load(List<BootService> allServices) {
-        for (final BootService bootService : ServiceLoader.load(BootService.class, AgentClassLoader.getDefault())) {
+        // 启动服务的服务加载者
+        ServiceLoader<BootService> bootServiceServiceLoader = ServiceLoader.load(BootService.class, AgentClassLoader.getDefault());
+        for (final BootService bootService : bootServiceServiceLoader) {
             allServices.add(bootService);
         }
     }

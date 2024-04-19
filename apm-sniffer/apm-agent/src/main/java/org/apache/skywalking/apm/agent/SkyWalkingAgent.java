@@ -148,7 +148,7 @@ public class SkyWalkingAgent {
         LOGGER.info("Skywalking agent transformer has installed.");
 
         try {
-            // 服务管理器启动
+            // 服务管理者启动
             ServiceManager.INSTANCE.boot();
         } catch (Exception e) {
             LOGGER.error(e, "Skywalking agent boot failure.");
