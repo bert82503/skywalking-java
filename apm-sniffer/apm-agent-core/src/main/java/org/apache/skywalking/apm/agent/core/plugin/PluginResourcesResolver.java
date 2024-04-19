@@ -29,6 +29,8 @@ import org.apache.skywalking.apm.agent.core.plugin.loader.AgentClassLoader;
 
 /**
  * Use the current classloader to read all plugin define file. The file must be named 'skywalking-plugin.def'
+ * 插件资源解析器，使用当前的类加载器读取所有插件定义文件。
+ * 该文件必须命名为“skywalking plugin.def”
  */
 public class PluginResourcesResolver {
     private static final ILog LOGGER = LogManager.getLogger(PluginResourcesResolver.class);
