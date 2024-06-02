@@ -92,6 +92,7 @@ public interface AbstractTracerContext {
     // 跨度
     /**
      * Create an entry span
+     * 入口跨度
      *
      * @param operationName most likely a service name
      * @return the span represents an entry point of this segment.
@@ -100,6 +101,7 @@ public interface AbstractTracerContext {
 
     /**
      * Create a local span
+     * 本地跨度
      *
      * @param operationName most likely a local method signature, or business name.
      * @return the span represents a local logic block.
@@ -108,6 +110,7 @@ public interface AbstractTracerContext {
 
     /**
      * Create an exit span
+     * 出口跨度
      *
      * @param operationName most likely a service name of remote
      * @param remotePeer    the network id(ip:port, hostname:port or ip1:port1,ip2,port, etc.). Remote peer could be set
@@ -117,6 +120,7 @@ public interface AbstractTracerContext {
     AbstractSpan createExitSpan(String operationName, String remotePeer);
 
     /**
+     * 活跃跨度
      * @return the active span of current tracing context(stack)
      */
     AbstractSpan activeSpan();
@@ -146,13 +150,13 @@ public interface AbstractTracerContext {
 
     /**
      * Get current correlation context
-     * 获取当前关联上下文
+     * 获取当前的关联上下文
      */
     CorrelationContext getCorrelationContext();
 
     /**
      * Get current primary endpoint name
-     * 获取当前主终端名称
+     * 获取当前的主终端名称
      */
     String getPrimaryEndpointName();
 }

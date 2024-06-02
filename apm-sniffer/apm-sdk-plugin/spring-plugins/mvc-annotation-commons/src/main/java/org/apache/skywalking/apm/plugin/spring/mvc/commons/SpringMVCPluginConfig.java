@@ -58,7 +58,7 @@ public class SpringMVCPluginConfig {
             /**
              * It controls what header data should be collected, this is for security purpose, values must be in lower case
              */
-            public static List<String> INCLUDE_HTTP_HEADERS ;
+            public static List<String> INCLUDE_HTTP_HEADERS;
         }
     }
 }
