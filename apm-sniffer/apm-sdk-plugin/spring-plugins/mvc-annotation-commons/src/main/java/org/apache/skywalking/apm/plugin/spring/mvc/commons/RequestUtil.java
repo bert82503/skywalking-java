@@ -31,7 +31,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * HTTP请求工具箱
+ */
 public class RequestUtil {
+    /**
+     * 收集HTTP参数
+     */
     public static void collectHttpParam(HttpServletRequest request, AbstractSpan span) {
         final Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap != null && !parameterMap.isEmpty()) {
@@ -65,6 +71,9 @@ public class RequestUtil {
         }
     }
 
+    /**
+     * 收集HTTP头信息
+     */
     public static void collectHttpHeaders(HttpServletRequest request, AbstractSpan span) {
         final List<String> headersList = new ArrayList<>(SpringMVCPluginConfig.Plugin.Http.INCLUDE_HTTP_HEADERS.size());
         SpringMVCPluginConfig.Plugin.Http.INCLUDE_HTTP_HEADERS.stream()

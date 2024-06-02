@@ -22,7 +22,7 @@ package org.apache.skywalking.apm.agent.core.context;
  */
 public class SW8CorrelationCarrierItem extends CarrierItem {
     /**
-     * 头信息的键
+     * 关联上下文头信息的键
      */
     public static final String HEADER_NAME = "sw8-correlation";
     /**
@@ -31,12 +31,14 @@ public class SW8CorrelationCarrierItem extends CarrierItem {
     private final CorrelationContext correlationContext;
 
     public SW8CorrelationCarrierItem(CorrelationContext correlationContext, CarrierItem next) {
+        // 序列化值
         super(HEADER_NAME, correlationContext.serialize(), next);
         this.correlationContext = correlationContext;
     }
 
     @Override
     public void setHeadValue(String headValue) {
+        // 反序列化值
         this.correlationContext.deserialize(headValue);
     }
 }

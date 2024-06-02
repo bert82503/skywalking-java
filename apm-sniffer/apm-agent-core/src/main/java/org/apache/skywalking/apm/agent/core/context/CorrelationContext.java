@@ -125,6 +125,7 @@ public class CorrelationContext {
 
     /**
      * Serialize this {@link CorrelationContext} to a {@link String}
+     * 序列化
      *
      * @return the serialization string.
      */
@@ -140,6 +141,7 @@ public class CorrelationContext {
 
     /**
      * Deserialize data from {@link String}
+     * 反序列化
      */
     void deserialize(String value) {
         if (StringUtil.isEmpty(value)) {
