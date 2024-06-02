@@ -31,6 +31,9 @@ public abstract class AbstractTag<T> {
      */
     private final int id;
 
+    /**
+     * 可以覆盖么
+     */
     private final boolean canOverwrite;
     /**
      * The key of this Tag.
@@ -48,6 +51,12 @@ public abstract class AbstractTag<T> {
         this(-1, key, false);
     }
 
+    /**
+     * 在跨度上打标签
+     *
+     * @param span     跨度
+     * @param tagValue 标签值
+     */
     protected abstract void set(AbstractSpan span, T tagValue);
 
     /**

@@ -23,6 +23,7 @@ import org.apache.skywalking.apm.agent.core.context.trace.AbstractSpan;
 /**
  * A subclass of {@link AbstractTag}, represent a tag with a {@link String} value.
  * <p>
+ * 字符串标签【实体】
  */
 public class StringTag extends AbstractTag<String> {
 
@@ -40,6 +41,7 @@ public class StringTag extends AbstractTag<String> {
 
     @Override
     public void set(AbstractSpan span, String tagValue) {
+        // 在跨度上打标签
         span.tag(this, tagValue);
     }
 }

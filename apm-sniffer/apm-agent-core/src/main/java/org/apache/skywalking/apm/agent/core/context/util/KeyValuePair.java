@@ -22,6 +22,7 @@ import org.apache.skywalking.apm.network.common.v3.KeyStringValuePair;
 
 /**
  * The <code>KeyValuePair</code> represents an object which contains a string key and a string value.
+ * 键值对
  */
 public class KeyValuePair {
     private String key;
