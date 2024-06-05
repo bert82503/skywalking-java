@@ -99,8 +99,10 @@ public enum PropertyPlaceholderHelper {
     }
 
     private String getConfigValue(String key, final Properties properties) {
+        // system property
         String value = System.getProperty(key);
         if (value == null) {
+            // system environment variable
             value = System.getenv(key);
         }
         if (value == null) {
